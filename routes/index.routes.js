@@ -1,7 +1,8 @@
-const router = require("express").Router();
+const express = require("express");
+const router = express.Router();
 
-router.get("/", (req, res, next) => {
-  res.json("All good in here");
-});
+const Game = require("./../models/Game.model");
 
-module.exports = router;
+const { isAuthenticated } = require("./../middleware/jwt.middleware");
+
+router.post("https://api.igdb.com/v4/games");
