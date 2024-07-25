@@ -4,7 +4,7 @@ require("dotenv").config();
 async function twitchAuthorization() {
   try {
     const response = await axios.post(
-      "hettps://id.twitch.tv/oauth2/token",
+      "https://id.twitch.tv/oauth2/token",
       null,
       {
         params: {
@@ -21,4 +21,14 @@ async function twitchAuthorization() {
   }
 }
 
-module.exports = { twitchAuthorization };
+async function getTwitchToken() {
+  try {
+    const response = await twitchAuthorization();
+    return response;
+  } catch (error) {
+    console.error("Error getting Twitch token", error);
+    throw new Error("Failed to get Twitch token");
+  }
+}
+
+module.exports = { twitchAuthorization, getTwitchToken };

@@ -52,6 +52,7 @@ router.post("/signup", async (req, res, next) => {
 
 router.post("/login", async (req, res, next) => {
   try {
+    const { email, password } = req.body;
     if (email === "" || password === "") {
       res.status(400).json({ message: "Provide email and password" });
       return;
@@ -69,9 +70,9 @@ router.post("/login", async (req, res, next) => {
     );
 
     if (correctPassword) {
-      const { email, name, _id } = registeredUser;
+      const { email, userName, _id } = registeredUser;
 
-      const user = { email, name, _id };
+      const user = { email, userName, _id };
 
       const authToken = jwt.sign(user, process.env.TOKEN_SECRET, {
         algorithm: "HS256",
@@ -83,7 +84,7 @@ router.post("/login", async (req, res, next) => {
       res.status(400).json({ message: "Unable to authorize the user" });
     }
   } catch (error) {
-    next(err);
+    next(error);
   }
 });
 
