@@ -4,8 +4,10 @@ const gameSchema = new Schema({
   name: String,
   genres: Array,
   cover: String,
+  developer: String,
   platforms: Array,
-  release_dates: Array,
+  first_release_date: Date,
+  follows: Number,
   summary: String,
   hypes: Number,
 });

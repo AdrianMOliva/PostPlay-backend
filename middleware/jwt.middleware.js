@@ -1,23 +1,17 @@
 const jwt = require("jsonwebtoken");
-const { twitchAuthorization } = require("./../middleware/twitchAuth");
+const { fetchIGDBData, getTwitchToken } = require("./../middleware/twitchAuth");
 require("dotenv").config();
 
 async function isAuthenticated(req, res, next) {
   try {
-    const authHeader = req.headers.authorization;
+    const token = req.headers.authorization.split(" ")[1];
 
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return res.status(401).json({ message: "No or invalid token provided" });
-    }
-
-    const token = authHeader.split(" ")[1];
-
-    if (!authHeader) {
+    if (!token) {
       return res.status(401).json({ message: "No token provided" });
     }
 
     const payload = jwt.verify(token, process.env.TOKEN_SECRET);
-    const twitchToken = await twitchAuthorization();
+    const twitchToken = await getTwitchToken();
 
     req.payload = payload;
     req.twitchToken = twitchToken;

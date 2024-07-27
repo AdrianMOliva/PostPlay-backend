@@ -5,18 +5,30 @@ const router = express.Router();
 const Game = require("./../models/Game.model");
 
 const { isAuthenticated } = require("./../middleware/jwt.middleware");
-const { fetchIGDBData } = require("./../middleware/igdbApi");
+const { getTwitchToken, fetchIGDBData } = require("./../middleware/twitchAuth");
+
 router.post("/games", isAuthenticated, async (req, res, next) => {
   try {
-    const { name, genres, cover, platforms, release_dates, summary, hypes } =
-      req.body;
+    const {
+      name,
+      genres,
+      cover,
+      developer,
+      platforms,
+      first_release_date,
+      follows,
+      summary,
+      hypes,
+    } = req.body;
 
     const createdGame = await Game.create({
       name: name,
       genres: genres,
       cover: cover,
+      developer: developer,
       platforms: platforms,
-      release_dates: release_dates,
+      first_release_date: first_release_date,
+      follows: follows,
       summary: summary,
       hypes: hypes,
     });
@@ -61,8 +73,17 @@ router.put("/games/:gameId", isAuthenticated, async (req, res, next) => {
       return;
     }
 
-    const { name, genres, cover, platforms, release_dates, summary, hypes } =
-      req.body;
+    const {
+      name,
+      genres,
+      cover,
+      developer,
+      platforms,
+      first_release_date,
+      follows,
+      summary,
+      hypes,
+    } = req.body;
 
     const updatedGame = await Game.findByIdAndUpdate(
       gameId,
@@ -70,8 +91,10 @@ router.put("/games/:gameId", isAuthenticated, async (req, res, next) => {
         name: name,
         genres: genres,
         cover: cover,
+        developer: developer,
         platforms: platforms,
-        release_dates: release_dates,
+        first_release_date: first_release_date,
+        follows: follows,
         summary: summary,
         hypes: hypes,
       },
@@ -100,16 +123,19 @@ router.delete("/games/:gameId", isAuthenticated, async (req, res, next) => {
   }
 });
 
-router.post("/igdb/games/fetch", isAuthenticated, async (req, res, next) => {
+router.post("/games/fetch", isAuthenticated, async (req, res, next) => {
   try {
-    const igdbData = await fetchIGDBData();
+    const accessToken = await getTwitchToken();
+    const igdbData = await fetchIGDBData(accessToken);
 
     const processedData = igdbData.map((item) => ({
       name: item.name,
       genres: item.genres,
       cover: item.cover,
+      developer: item.developer,
       platforms: item.platforms,
-      release_dates: item.release_dates,
+      first_release_date: item.first_release_date,
+      follows: item.follows,
       summary: item.summary,
       hypes: item.hypes,
     }));

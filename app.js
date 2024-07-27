@@ -6,18 +6,21 @@ const express = require("express");
 const mongoose = require("mongoose");
 const axios = require("axios");
 const { isAuthenticated } = require("./middleware/jwt.middleware");
-const { fetchIGDBData } = require("./middleware/igdbApi");
+const {
+  twitchAuthorization,
+  getTwitchToken,
+} = require("./middleware/twitchAuth");
 const Game = require("./models/Game.model");
 const app = express();
 app.use(express.json());
 
 require("./config")(app);
 
-const indexRoutes = require("./routes/index.routes");
-app.use("/api", indexRoutes);
-
 const authRoutes = require("./routes/auth.routes");
 app.use("/auth", authRoutes);
+
+const indexRoutes = require("./routes/index.routes");
+app.use("/api", indexRoutes);
 
 require("./error-handling")(app);
 

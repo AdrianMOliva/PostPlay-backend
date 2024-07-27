@@ -1,34 +1,44 @@
+const express = require("express");
+const mongoose = require("mongoose");
+const router = express.Router();
+const Game = require(".././models/Game.model");
 const axios = require("axios");
-require("dotenv").config();
 
-async function twitchAuthorization() {
+const getTwitchToken = async () => {
+  const clientId = process.env.TWITCH_CLIENT_ID;
+  const clientSecret = process.env.TWITCH_CLIENT_SECRET;
+
   try {
     const response = await axios.post(
-      "https://id.twitch.tv/oauth2/token",
-      null,
+      `https://id.twitch.tv/oauth2/token?client_id=${clientId}&client_secret=${clientSecret}&grant_type=client_credentials`
+    );
+    const { access_token } = response.data;
+
+    return access_token;
+  } catch (error) {
+    console.error("Error getting access token:", error);
+  }
+};
+
+const fetchIGDBData = async (accessToken) => {
+  const clientId = process.env.TWITCH_CLIENT_ID;
+
+  try {
+    const response = await axios.post(
+      "https://api.igdb.com/v4/games",
+      "fields cover, first_release_date, follows, genres, hypes, name, platforms, summary",
       {
-        params: {
-          client_id: process.env.TWITCH_CLIENT_ID,
-          client_secret: process.env.TWITCH_CLIENT_SECRET,
-          grant_type: "client_credentials",
+        headers: {
+          "Client-ID": clientId,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
 
-    return response.data.access_token;
+    return response.data;
   } catch (error) {
-    console.error("Error getting Twitch Authorization", error);
+    console.error("Error fetching IGDB data:", error);
   }
-}
+};
 
-async function getTwitchToken() {
-  try {
-    const response = await twitchAuthorization();
-    return response;
-  } catch (error) {
-    console.error("Error getting Twitch token", error);
-    throw new Error("Failed to get Twitch token");
-  }
-}
-
-module.exports = { twitchAuthorization, getTwitchToken };
+module.exports = { fetchIGDBData, getTwitchToken };
