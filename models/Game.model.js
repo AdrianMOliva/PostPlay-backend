@@ -3,10 +3,9 @@ const { Schema, model } = require("mongoose");
 const gameSchema = new Schema({
   name: String,
   genres: Array,
-  cover: String,
+  covers: [{ type: Schema.Types.ObjectId, ref: "Cover" }],
   developer: String,
   platforms: Array,
-  first_release_date: Date,
   follows: Number,
   summary: String,
   hypes: Number,

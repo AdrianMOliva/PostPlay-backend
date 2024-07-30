@@ -22,6 +22,9 @@ app.use("/auth", authRoutes);
 const indexRoutes = require("./routes/index.routes");
 app.use("/api", indexRoutes);
 
+const coverRoutes = require("./routes/cover.routes");
+app.use("/api", coverRoutes);
+
 require("./error-handling")(app);
 
 module.exports = app;

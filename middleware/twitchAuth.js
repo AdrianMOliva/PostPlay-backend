@@ -1,7 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const router = express.Router();
-const Game = require(".././models/Game.model");
 const axios = require("axios");
 
 const getTwitchToken = async () => {
@@ -26,7 +25,7 @@ const fetchIGDBData = async (accessToken) => {
   try {
     const response = await axios.post(
       "https://api.igdb.com/v4/games",
-      "fields cover, first_release_date, follows, genres, hypes, name, platforms, summary",
+      "fields *; where version_parent = null; where rating > 90; limit 500;",
       {
         headers: {
           "Client-ID": clientId,
@@ -38,6 +37,7 @@ const fetchIGDBData = async (accessToken) => {
     return response.data;
   } catch (error) {
     console.error("Error fetching IGDB data:", error);
+    return [];
   }
 };
 

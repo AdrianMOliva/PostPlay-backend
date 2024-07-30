@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const router = express.Router();
 
 const Game = require("./../models/Game.model");
+const Cover = require("./../models/Cover.model");
 
 const { isAuthenticated } = require("./../middleware/jwt.middleware");
 const { getTwitchToken, fetchIGDBData } = require("./../middleware/twitchAuth");
@@ -12,10 +13,10 @@ router.post("/games", isAuthenticated, async (req, res, next) => {
     const {
       name,
       genres,
-      cover,
+      covers,
       developer,
       platforms,
-      first_release_date,
+
       follows,
       summary,
       hypes,
@@ -24,10 +25,10 @@ router.post("/games", isAuthenticated, async (req, res, next) => {
     const createdGame = await Game.create({
       name: name,
       genres: genres,
-      cover: cover,
+      covers: covers,
       developer: developer,
       platforms: platforms,
-      first_release_date: first_release_date,
+
       follows: follows,
       summary: summary,
       hypes: hypes,
@@ -35,16 +36,16 @@ router.post("/games", isAuthenticated, async (req, res, next) => {
 
     res.json(createdGame);
   } catch (error) {
-    next(err);
+    next(error);
   }
 });
 
 router.get("/games", isAuthenticated, async (req, res, next) => {
   try {
-    const allGames = await Game.find();
+    const allGames = await Game.find().populate("covers");
     res.json(allGames);
   } catch (error) {
-    next(err);
+    next(error);
   }
 });
 
@@ -57,7 +58,7 @@ router.get("/games/:gameId", isAuthenticated, async (req, res, next) => {
       return;
     }
 
-    const oneGame = await Game.findById(gameId);
+    const oneGame = await Game.findById(gameId).populate("covers");
     res.json(oneGame);
   } catch (error) {
     next(err);
@@ -76,10 +77,10 @@ router.put("/games/:gameId", isAuthenticated, async (req, res, next) => {
     const {
       name,
       genres,
-      cover,
+      covers,
       developer,
       platforms,
-      first_release_date,
+
       follows,
       summary,
       hypes,
@@ -90,10 +91,10 @@ router.put("/games/:gameId", isAuthenticated, async (req, res, next) => {
       {
         name: name,
         genres: genres,
-        cover: cover,
+        covers: covers,
         developer: developer,
         platforms: platforms,
-        first_release_date: first_release_date,
+
         follows: follows,
         summary: summary,
         hypes: hypes,
@@ -131,10 +132,10 @@ router.post("/games/fetch", isAuthenticated, async (req, res, next) => {
     const processedData = igdbData.map((item) => ({
       name: item.name,
       genres: item.genres,
-      cover: item.cover,
+      covers: item.covers,
       developer: item.developer,
       platforms: item.platforms,
-      first_release_date: item.first_release_date,
+
       follows: item.follows,
       summary: item.summary,
       hypes: item.hypes,
