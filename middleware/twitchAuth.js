@@ -25,7 +25,7 @@ const fetchIGDBData = async (accessToken) => {
   try {
     const response = await axios.post(
       "https://api.igdb.com/v4/games",
-      "fields *; where version_parent = null; where rating > 90; limit 500;",
+      'fields *; where version_parent = null; search "Baldur"; limit 500;',
       {
         headers: {
           "Client-ID": clientId,
