@@ -5,7 +5,7 @@ const gameSchema = new Schema({
   genres: Array,
   covers: [{ type: Schema.Types.ObjectId, ref: "Cover" }],
   developer: String,
-  platforms: [{ type: Schema.Types.ObjectId, ref: "Platform" }],
+  platforms: Array,
   follows: Number,
   summary: String,
   hypes: Number,

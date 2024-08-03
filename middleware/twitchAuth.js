@@ -19,13 +19,13 @@ const getTwitchToken = async () => {
   }
 };
 
-const fetchIGDBData = async (accessToken) => {
+const fetchCovers = async (accessToken) => {
   const clientId = process.env.TWITCH_CLIENT_ID;
 
   try {
     const response = await axios.post(
-      "https://api.igdb.com/v4/games",
-      'fields *; where version_parent = null; search "Baldur"; limit 500;',
+      "https://api.igdb.com/v4/covers",
+      "fields *; limit 500;",
       {
         headers: {
           "Client-ID": clientId,
@@ -41,4 +41,25 @@ const fetchIGDBData = async (accessToken) => {
   }
 };
 
-module.exports = { fetchIGDBData, getTwitchToken };
+const fetchIGDBData = async (accessToken) => {
+  const clientId = process.env.TWITCH_CLIENT_ID;
+
+  try {
+    const response = await axios.post(
+      "https://api.igdb.com/v4/games",
+      'fields *; where version_parent = null; search "Call of Duty"; limit 500;',
+      {
+        headers: {
+          "Client-ID": clientId,
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching IGDB data:", error);
+  }
+};
+
+module.exports = { fetchIGDBData, getTwitchToken, fetchCovers };
