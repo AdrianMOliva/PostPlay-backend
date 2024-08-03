@@ -18,15 +18,7 @@ async function isAuthenticated(req, res, next) {
 
     next();
   } catch (error) {
-    let errorMessage = "Invalid token";
-    if (error.name === "JsonWebTokenError") {
-      errorMessage = "Invalid token";
-    } else if (error.name === "TokenExpiredError") {
-      errorMessage = "Token expired";
-    } else if (error.message.includes("Failed to get Twitch")) {
-      errorMessage = "Failed to get Twitch token";
-    }
-    res.status(400).json({ message: errorMessage, error: error.message });
+    res.status(400).json({ message: "Invalid token" });
   }
 }
 
