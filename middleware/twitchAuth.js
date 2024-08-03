@@ -37,7 +37,6 @@ const fetchCovers = async (accessToken) => {
     return response.data;
   } catch (error) {
     console.error("Error fetching IGDB data:", error);
-    return [];
   }
 };
 
