@@ -9,6 +9,7 @@ const gameSchema = new Schema({
   follows: Number,
   summary: String,
   hypes: Number,
+  ratings: Array,
 });
 
 const Game = model("Game", gameSchema);

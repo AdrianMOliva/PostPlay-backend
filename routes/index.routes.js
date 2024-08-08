@@ -20,6 +20,7 @@ router.post("/games", isAuthenticated, async (req, res, next) => {
       follows,
       summary,
       hypes,
+      ratings,
     } = req.body;
 
     const createdGame = await Game.create({
@@ -32,6 +33,7 @@ router.post("/games", isAuthenticated, async (req, res, next) => {
       follows: follows,
       summary: summary,
       hypes: hypes,
+      ratings: ratings,
     });
 
     res.json(createdGame);
@@ -84,6 +86,7 @@ router.put("/games/:gameId", isAuthenticated, async (req, res, next) => {
       follows,
       summary,
       hypes,
+      ratings,
     } = req.body;
 
     const updatedGame = await Game.findByIdAndUpdate(
@@ -98,6 +101,7 @@ router.put("/games/:gameId", isAuthenticated, async (req, res, next) => {
         follows: follows,
         summary: summary,
         hypes: hypes,
+        ratings: ratings,
       },
       { new: true }
     );
@@ -139,6 +143,7 @@ router.post("/games/fetch", isAuthenticated, async (req, res, next) => {
       follows: item.follows,
       summary: item.summary,
       hypes: item.hypes,
+      ratings: item.ratings,
     }));
 
     const savedGames = await Game.insertMany(processedData);

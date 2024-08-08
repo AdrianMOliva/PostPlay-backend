@@ -25,6 +25,9 @@ app.use("/api", indexRoutes);
 const coverRoutes = require("./routes/cover.routes");
 app.use("/api", coverRoutes);
 
+const ratingRoutes = require("./routes/rating.routes");
+app.use("/api", ratingRoutes);
+
 require("./error-handling")(app);
 
 module.exports = app;
