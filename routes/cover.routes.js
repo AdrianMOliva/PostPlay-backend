@@ -16,7 +16,7 @@ router.post("/covers", isAuthenticated, async (req, res, next) => {
     const processedData = igdbData.map((item) => ({
       url: item.url,
       image_id: item.image_id,
-      game: item.game,
+      game: item.game._id,
     }));
 
     const savedCovers = await Cover.insertMany(processedData);
@@ -25,5 +25,4 @@ router.post("/covers", isAuthenticated, async (req, res, next) => {
     next(error);
   }
 });
-
 module.exports = router;

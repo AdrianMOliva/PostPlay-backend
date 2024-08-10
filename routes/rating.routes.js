@@ -2,8 +2,9 @@ const express = require("express");
 const router = express.Router();
 const Rating = require("./../models/Rating.model");
 
-router.post("/api/ratings", async (req, res) => {
-  const { gameId, rating, userId, review } = req.body;
+router.post("/ratings", async (req, res) => {
+  const { gameId, rating, review, userId } = req.body;
+
   try {
     if (!gameId || !rating || !userId) {
       return res
@@ -20,10 +21,10 @@ router.post("/api/ratings", async (req, res) => {
   }
 });
 
-router.get("/api/ratings/:gameId/average", async (req, res) => {
+router.get("/ratings/:gameId/average", async (req, res) => {
   const { gameId } = req.params;
   try {
-    const ratings = await Rating.find({ gameId });
+    const ratings = await Rating.find({ gameId }).populate("gameId", "name");
 
     if (ratings.length === 0) {
       return res
@@ -38,6 +39,22 @@ router.get("/api/ratings/:gameId/average", async (req, res) => {
   } catch (error) {
     console.error("Error fetching average rating:", error);
     res.status(500).json({ message: "Failed to fetch average rating." });
+  }
+});
+
+router.delete("/ratings/:reviewId", async (req, res) => {
+  const { reviewId } = req.params;
+  try {
+    const result = await Rating.findByIdAndDelete(reviewId);
+
+    if (!result) {
+      return res.status(404).json({ message: "Review not found." });
+    }
+
+    res.status(200).json({ message: "Review deleted successfully." });
+  } catch (error) {
+    console.error("Error deleting review:", error);
+    res.status(500).json({ message: "Failed to delete review." });
   }
 });
 

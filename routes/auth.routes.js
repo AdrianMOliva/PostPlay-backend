@@ -3,7 +3,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("./../models/User.model");
 const { isAuthenticated } = require("./../middleware/jwt.middleware");
-
+const Rating = require("../models/Rating.model");
 const router = express.Router();
 const saltRounds = 10;
 
@@ -91,5 +91,18 @@ router.post("/login", async (req, res, next) => {
 router.get("/verify", isAuthenticated, (req, res, next) => {
   res.status(200).json(req.payload);
 });
+
+router.get("/users/:userId/reviews", async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const reviews = await Rating.find({ userId }).populate("gameId", "name");
+    res.json(reviews);
+  } catch (error) {
+    console.error("Error fetching reviews:", error);
+    res.status(500).json({ message: "Failed to fetch reviews." });
+  }
+});
+
+module.exports = router;
 
 module.exports = router;
