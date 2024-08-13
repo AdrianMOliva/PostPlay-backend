@@ -24,7 +24,7 @@ router.post("/ratings", async (req, res) => {
 router.get("/ratings/:gameId/average", async (req, res) => {
   const { gameId } = req.params;
   try {
-    const ratings = await Rating.find({ gameId }).populate("gameId", "name");
+    const ratings = await Rating.find({ gameId });
 
     if (ratings.length === 0) {
       return res
