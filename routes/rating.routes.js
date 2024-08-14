@@ -58,4 +58,20 @@ router.delete("/ratings/:reviewId", async (req, res) => {
   }
 });
 
+router.get("/ratings/:gameId/reviews", isAuthenticated, async (req, res) => {
+  const { gameId } = req.params;
+
+  try {
+    if (!mongoose.Types.ObjectId.isValid(gameId)) {
+      return res.status(400).json({ message: "Invalid game ID" });
+    }
+
+    const reviews = await Rating.find({ gameId }).populate('user', 'userName');
+    res.status(200).json(reviews);
+  } catch (error) {
+    console.error("Error fetching reviews:", error);
+    res.status(500).json({ message: "Failed to fetch reviews." });
+  }
+});
+
 module.exports = router;
