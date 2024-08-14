@@ -18,33 +18,14 @@ const getTwitchToken = async () => {
     console.error("Error getting access token:", error);
   }
 };
-const fetchCovers = async (accessToken) => {
-  const clientId = process.env.TWITCH_CLIENT_ID;
 
-  try {
-    const response = await axios.post(
-      "https://api.igdb.com/v4/covers",
-      "fields *; limit 500;",
-      {
-        headers: {
-          "Client-ID": clientId,
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
-
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching IGDB data:", error);
-  }
-};
 const fetchIGDBData = async (accessToken) => {
   const clientId = process.env.TWITCH_CLIENT_ID;
 
   try {
     const response = await axios.post(
       "https://api.igdb.com/v4/games",
-      'fields *, genres.name, platforms.name; where version_parent = null; search "Mario" ;  limit 50;',
+      'fields *, genres.name, platforms.name, cover.url, cover.image_id; where version_parent = null; search "Mario" ;  limit 50;',
       {
         headers: {
           "Client-ID": clientId,
@@ -59,4 +40,4 @@ const fetchIGDBData = async (accessToken) => {
   }
 };
 
-module.exports = { fetchIGDBData, getTwitchToken, fetchCovers };
+module.exports = { fetchIGDBData, getTwitchToken };

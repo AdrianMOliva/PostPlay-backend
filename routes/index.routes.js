@@ -129,17 +129,23 @@ router.post("/games/fetch", isAuthenticated, async (req, res, next) => {
     const accessToken = await getTwitchToken();
     const igdbData = await fetchIGDBData(accessToken);
 
-    const processedData = igdbData.map((item) => ({
-      name: item.name,
-      genres: item.genres,
-      covers: item.covers,
-      platforms: item.platforms,
-      follows: item.follows,
-      summary: item.summary,
-      hypes: item.hypes,
-      ratings: item.ratings,
-      backlog: item.backlog,
-    }));
+    const processedData = igdbData.map((item) => {
+      let coverUrl = null;
+      if (item.cover) {
+        coverUrl = `https://images.igdb.com/igdb/image/upload/t_cover_big/${item.cover.image_id}.jpg`;
+      }
+      return {
+        name: item.name,
+        genres: item.genres,
+        covers: coverUrl,
+        platforms: item.platforms,
+        follows: item.follows,
+        summary: item.summary,
+        hypes: item.hypes,
+        ratings: item.ratings,
+        backlog: item.backlog,
+      };
+    });
 
     const savedGames = await Game.insertMany(processedData);
     res.json(savedGames);
