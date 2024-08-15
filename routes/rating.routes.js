@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Rating = require("./../models/Rating.model");
 const { isAuthenticated } = require("./../middleware/jwt.middleware");
+const mongoose = require("mongoose");
 
 router.post("/ratings", async (req, res) => {
   const { gameId, rating, review, userId } = req.body;
@@ -67,7 +68,11 @@ router.get("/ratings/:gameId/reviews", isAuthenticated, async (req, res) => {
       return res.status(400).json({ message: "Invalid game ID" });
     }
 
-    const reviews = await Rating.find({ gameId }).populate("user", "userName");
+    const reviews = await Rating.find({ gameId }).populate(
+      "userId",
+      "userName"
+    );
+    console.log("Fetched reviews:", reviews);
     res.status(200).json(reviews);
   } catch (error) {
     console.error("Error fetching reviews:", error);
