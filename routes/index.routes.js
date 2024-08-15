@@ -35,16 +35,16 @@ router.post("/games", isAuthenticated, async (req, res, next) => {
 
     res.json(createdGame);
   } catch (error) {
-    next(error);
+    res.status(500).json({ error });
   }
 });
 
 router.get("/games", isAuthenticated, async (req, res, next) => {
   try {
-    const allGames = await Game.find().populate("covers");
+    const allGames = await Game.find();
     res.json(allGames);
   } catch (error) {
-    next(error);
+    res.status(500).json({ error });
   }
 });
 
@@ -60,7 +60,7 @@ router.get("/games/:gameId", isAuthenticated, async (req, res, next) => {
     const oneGame = await Game.findById(gameId).populate("covers");
     res.json(oneGame);
   } catch (error) {
-    next(error);
+    res.status(500).json({ error });
   }
 });
 
@@ -104,7 +104,7 @@ router.put("/games/:gameId", isAuthenticated, async (req, res, next) => {
 
     res.json(updatedGame);
   } catch (error) {
-    next(error);
+    res.status(500).json({ error });
   }
 });
 
@@ -120,7 +120,7 @@ router.delete("/games/:gameId", isAuthenticated, async (req, res, next) => {
     const deletedGame = await Game.findByIdAndDelete(gameId);
     res.status(204).send();
   } catch (error) {
-    next(error);
+    res.status(500).json({ error });
   }
 });
 
@@ -159,7 +159,7 @@ router.get("/games/check", isAuthenticated, async (req, res, next) => {
     const allGames = await Game.find();
     res.json(allGames);
   } catch (error) {
-    next(error);
+    res.status(500).json({ error });
   }
 });
 
