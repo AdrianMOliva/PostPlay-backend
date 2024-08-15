@@ -132,7 +132,7 @@ router.post("/games/fetch", isAuthenticated, async (req, res, next) => {
     const processedData = igdbData.map((item) => {
       let coverUrl = null;
       if (item.cover) {
-        coverUrl = `https://images.igdb.com/igdb/image/upload/t_cover_big/${item.cover.image_id}.jpg`;
+        coverUrl = `https://images.igdb.com/igdb/image/upload/t_cover_small/${item.cover.image_id}.jpg`;
       }
       return {
         name: item.name,
