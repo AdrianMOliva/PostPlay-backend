@@ -50,7 +50,7 @@ router.post("/signup", async (req, res, next) => {
   }
 });
 
-router.post("/login", async (req, res, next) => {
+router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
     if (email === "" || password === "") {
@@ -84,6 +84,7 @@ router.post("/login", async (req, res, next) => {
       res.status(400).json({ message: "Unable to authorize the user" });
     }
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error });
   }
 });
