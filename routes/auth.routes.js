@@ -104,5 +104,3 @@ router.get("/users/:userId/reviews", async (req, res) => {
 });
 
 module.exports = router;
-
-module.exports = router;

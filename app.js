@@ -22,9 +22,6 @@ app.use("/auth", authRoutes);
 const indexRoutes = require("./routes/index.routes");
 app.use("/api", indexRoutes);
 
-const coverRoutes = require("./routes/cover.routes");
-app.use("/api", coverRoutes);
-
 const ratingRoutes = require("./routes/rating.routes");
 app.use("/api", ratingRoutes);
 
