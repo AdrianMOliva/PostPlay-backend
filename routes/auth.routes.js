@@ -46,7 +46,7 @@ router.post("/signup", async (req, res, next) => {
 
     res.status(201).json({ user: user });
   } catch (error) {
-    next(err);
+    res.status(500).json({ error });
   }
 });
 
@@ -84,7 +84,7 @@ router.post("/login", async (req, res, next) => {
       res.status(400).json({ message: "Unable to authorize the user" });
     }
   } catch (error) {
-    next(error);
+    res.status(500).json({ error });
   }
 });
 
